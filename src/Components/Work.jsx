@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { useScroll } from "framer-motion";
 
 const Work = () => {
-  const images = [
+  const [images, setImages] = useState([
     {
       url: "https://assets-global.website-files.com/6334198f239547d0f9cd84b3/634ef09178195ce0073e38f3_Refokus%20Tools-1.png",
       top: "50%",
@@ -38,7 +39,52 @@ const Work = () => {
       left: "55%",
       isActive: false,
     },
-  ];
+  ]);
+
+  function imagesShow(arr) {
+    setImages(prev =>(
+      prev.map((item,index) =>(
+        arr.indexOf(index)== -1 ? (
+          {...item, isActive : false}
+        )
+        : {...item, isActive: true}
+      ))
+    ))
+  }
+
+  const { scrollYProgress } = useScroll();
+  scrollYProgress.on("change", (data) => {
+    switch (Math.floor(data * 100)) {
+      case 0:
+        imagesShow([]);
+
+        break;
+      case 1:
+        imagesShow([0]);
+
+        break;
+      case 2:
+        imagesShow([0, 1]);
+
+        break;
+      case 3:
+        imagesShow([0, 1, 2]);
+
+        break;
+      case 4:
+        imagesShow([0, 1, 2, 3]);
+
+        break;
+      case 5:
+        imagesShow([0, 1, 2, 3, 4]);
+
+        break;
+      case 6:
+        imagesShow([0, 1, 2, 3, 4, 5]);
+
+        break;
+    }
+  });
 
   return (
     <div className="w-full mt-10">
@@ -51,6 +97,7 @@ const Work = () => {
           (item, index) =>
             item.isActive && (
               <img
+                key={index}
                 className="absolute w-60 rounded -translate-x-[50%] -translate-y-[50%]"
                 src={item.url}
                 style={{ top: item.top, left: item.left }}
